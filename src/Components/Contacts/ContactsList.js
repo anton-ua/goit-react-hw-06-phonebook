@@ -11,8 +11,8 @@ const filterContacts = (contacts, filter) => {
 };
 
 const ContactsList = ({ contacts, filter, deleteContact }) => {
-  const filteredContacts = filterContacts(contacts, filter);
-
+  const filteredContacts = filter ? filterContacts(contacts, filter) : contacts;
+  console.log("contacts", contacts);
   return (
     <TransitionGroup component="ul">
       {filteredContacts.map(({ name, number, id }) => (

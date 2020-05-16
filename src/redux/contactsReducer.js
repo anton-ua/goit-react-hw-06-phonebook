@@ -1,36 +1,37 @@
-import { Type } from "./contactsActions";
-import { createReducer } from "@reduxjs/toolkit";
+import { Type } from "./actionsTypes";
+import { createReducer, combineReducers } from "@reduxjs/toolkit";
 
-const initialState = {
-  contacts: [
-    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-  ],
-  filter: "",
-};
+const contacts = [
+  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+];
 
-const contactsReducer = createReducer(initialState, {
-  [Type.ADD]: (state, action) => {
+const contactsReducer = createReducer(contacts, {
+  [Type.ADD]: (state, { payload }) => {
     if (
-      state.contacts
+      state
         .map(({ name }) => name.toLowerCase())
-        .includes(action.payload.name.toLowerCase())
+        .includes(payload.name.toLowerCase())
     ) {
-      alert(`${action.payload.name} is already in contact`);
+      alert(`${payload.name} is already in contact`);
       return state;
     } else {
-      return { ...state, contacts: [...state.contacts, action.payload] };
+      return [...state, payload];
     }
   },
-  [Type.DELETE]: (state, action) => ({
-    ...state,
-    contacts: [
-      ...state.contacts.filter((contact) => contact.id !== action.payload),
-    ],
-  }),
-  [Type.FILTER]: (state, action) => ({ ...state, filter: action.payload }),
+
+  [Type.DELETE]: (state, { payload }) => [
+    ...state.filter((contact) => contact.id !== payload),
+  ],
 });
 
-export default contactsReducer;
+const filterReducer = createReducer(null, {
+  [Type.FILTER]: (state, { payload }) => payload,
+});
+
+export default combineReducers({
+  contacts: contactsReducer,
+  filter: filterReducer,
+});
