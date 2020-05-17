@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import styles from "./ContactsList.module.css";
 import TransitionListItem from "../../Transition/TransitionListItem.module.css";
+import ContactsItemConnect from "../ContactsItem/ContactsItemConnect";
 
 const filterContacts = (contacts, filter) => {
   return contacts.filter((contact) =>
@@ -10,9 +10,9 @@ const filterContacts = (contacts, filter) => {
   );
 };
 
-const ContactsList = ({ contacts, filter, deleteContact }) => {
+const ContactsList = ({ contacts, filter }) => {
   const filteredContacts = filter ? filterContacts(contacts, filter) : contacts;
-  console.log("contacts", contacts);
+
   return (
     <TransitionGroup component="ul">
       {filteredContacts.map(({ name, number, id }) => (
@@ -22,18 +22,7 @@ const ContactsList = ({ contacts, filter, deleteContact }) => {
           key={id}
           classNames={TransitionListItem}
         >
-          <li>
-            <p>
-              {name}: <span>{number}</span>
-              <button
-                type="button"
-                onClick={() => deleteContact(id)}
-                className={styles.button}
-              >
-                X
-              </button>
-            </p>
-          </li>
+          <ContactsItemConnect name={name} number={number} id={id} />
         </CSSTransition>
       ))}
     </TransitionGroup>
@@ -45,5 +34,4 @@ export default ContactsList;
 ContactsList.propTypes = {
   contacts: PropTypes.array.isRequired,
   filter: PropTypes.string.isRequired,
-  deleteContact: PropTypes.func.isRequired,
 };

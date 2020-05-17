@@ -14,7 +14,7 @@ export default class AddContact extends Component {
     const { name, value } = target;
 
     this.setState(({ contactToAdd }) => ({
-      contactToAdd: { ...contactToAdd, id: uuidv4(), [name]: value },
+      contactToAdd: { ...contactToAdd, [name]: value },
     }));
   };
 
@@ -29,7 +29,7 @@ export default class AddContact extends Component {
       return;
     }
 
-    this.props.addContact({ ...this.state.contactToAdd });
+    this.props.addContact({ ...this.state.contactToAdd, id: uuidv4() });
 
     this.reset();
   };
